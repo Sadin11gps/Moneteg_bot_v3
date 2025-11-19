@@ -1019,7 +1019,7 @@
                 }
                 
                 // Show confirmation before proceeding
-                if (!tg.showConfirm(`আপনি কি নিশ্চিত যে ${amount} TK উত্তোলন করতে চান (${method}: ${number})?`)) {
+                if (!confirm(`আপনি কি নিশ্চিত যে ${amount} TK উত্তোলন করতে চান (${method}: ${number})?`)) {
                     return;
                 }
 
@@ -1173,6 +1173,7 @@
 
 
 </html>
+
 
 
 
