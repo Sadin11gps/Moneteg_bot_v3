@@ -515,7 +515,7 @@
                 <input type="hidden" id="wallet-select" value="main"> 
 
 
-                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 100 TK)</label>
+                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 50 TK)</label>
                 <input type="text" id="amount-input" placeholder="টাকার পরিমাণ লিখুন (যেমন: 100, 200)">
 
                 <label for="method-select">মাধ্যম নির্বাচন করুন</label>
@@ -584,7 +584,7 @@
                 </div>
                 <div class="modal-body">
                     <p style="color: var(--subtle-text); font-size: 0.9rem; margin-bottom: 10px;">
-                        Gemini আপনার জন্য আকর্ষণীয় একটি রেফারেল ম্যাসেজ তৈরি করেছে।
+                        আপনার জন্য আকর্ষণীয় একটি রেফারেল ম্যাসেজ তৈরি করা হয়েছে।
                     </p>
                     <textarea id="generated-message" readonly>
                         এখানে ম্যাসেজ লোড হবে...
@@ -652,10 +652,10 @@
             const CHANNEL_LINK = "https://t.me/amrrdsteam";
             const GROUP_LINK = "https://t.me/smart_network81_group";
             const DAILY_AD_LIMIT = 10;
-            const AD_POINT = 0.50; // Points per ad (changed from 2 points to 0.50 TK as seen in UI text)
+            const AD_POINT = 50; // Points per ad (changed from 2 points to 0.50 TK as seen in UI text)
             const REFERRAL_BONUS_TK = 30.00; // প্রতি রেফারে 30 টাকা
-            const MIN_WITHDRAW_AMOUNT = 100;
-            const MIN_REFERRALS_FOR_WITHDRAW = 20; // উইথড্র করার জন্য প্রয়োজনীয় রেফার সংখ্যা
+            const MIN_WITHDRAW_AMOUNT = 50;
+            const MIN_REFERRALS_FOR_WITHDRAW = 00; // উইথড্র করার জন্য প্রয়োজনীয় রেফার সংখ্যা
             
             const userId = tg.initDataUnsafe.user.id.toString();
             let userState = {};
@@ -1170,5 +1170,6 @@
         });
     </script>
 </body>
+
 
 </html>
