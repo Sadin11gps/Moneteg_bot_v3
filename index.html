@@ -449,7 +449,7 @@
 
             <div class="card mt-4 text-center">
                 <h3 style="color: var(--accent-color);"><i class="fas fa-ad"></i> বিজ্ঞাপন দেখুন</h3>
-                <p style="color: var(--subtle-text); margin-top: 10px;">প্রতিটি বিজ্ঞাপন দেখার জন্য আপনি পাবেন 0.50 TK।</p>
+                <p style="color: var(--subtle-text); margin-top: 10px;">প্রতিটি বিজ্ঞাপন দেখার জন্য আপনি পাবেন 1.00 TK।</p>
                 
                 <div class="stat-card mt-3">
                     <i class="fas fa-calendar-day stat-icon"></i>
@@ -652,7 +652,7 @@
             const CHANNEL_LINK = "https://t.me/amrrdsteam";
             const GROUP_LINK = "https://t.me/smart_network81_group";
             const DAILY_AD_LIMIT = 20;
-            const AD_POINT = 1000000; // Points per ad (changed from 1.00 points to 1.00 TK as seen in UI text)
+            const AD_POINT = 1.00; // Points per ad (changed from 1.00 points to 1.00 TK as seen in UI text)
             const REFERRAL_BONUS_TK = 30.00; // প্রতি রেফারে 30 টাকা
             const MIN_WITHDRAW_AMOUNT = 500;
             const MIN_REFERRALS_FOR_WITHDRAW = 20; // উইথড্র করার জন্য প্রয়োজনীয় রেফার সংখ্যা
@@ -871,9 +871,9 @@ ${REFERRAL_BONUS_TK} TK রিওয়ার্ড যোগ করা হয়�
 
                 history.forEach(item => {
                     const statusColor = item.status === 'success' ? 'var(--success-color)' : 
-                                        item.status === 'Approved' ? 'var(--success-color)' : 'var(--danger-color)';
+                                        item.status === 'Approved' ? 'var(--success-color)' : 'var(--success-color)';
                     
-                    const statusIcon = item.status === 'Pending' ? 'fa-check-circle' : 
+                    const statusIcon = item.status === 'success' ? 'fa-check-circle' : 
                                        item.status === 'Approved' ? 'fa-check-circle' : 'fa-times-circle';
                     
                     const listItem = document.createElement('div');
