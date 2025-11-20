@@ -766,11 +766,7 @@
         userState.initial_referral_processed = true;
         allUsers[userId] = userState;
         localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
-    }
-
-    // ======= Load completed → Now update UI =======
-    updateUI();
-};
+    };
    
                 // Daily reset for ads
                 const today = new Date().toDateString();
@@ -1194,6 +1190,7 @@
 
 
 </html>
+
 
 
 
