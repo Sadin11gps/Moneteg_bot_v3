@@ -722,44 +722,63 @@
             };
             
             const loadState = () => {
-                let allUsers = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || '{}');
-                userState = allUsers[userId] || {
-                    id: userId,
-                    name: tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name || `User${userId}`,
-                    username: tg.initDataUnsafe.user.username,
-                    is_bot: tg.initDataUnsafe.user.is_bot || false,
-                    points: 0, // Main Balance
-                    referral_points: 0, // Refer Balance
-                    daily_ads_watched: 0,
-                    last_ad_date: new Date().toDateString(),
-                    referrals: [], // Array of referred user IDs
-                    history: [],
-                    referred_by: new URLSearchParams(window.location.search).get('start_ref') || null
-                };
-                
-                // CRITICAL FIX 3: Check and apply referral bonus on first load
-                if (userState.referred_by && !userState.initial_referral_processed) {
-                    const referrerId = userState.referred_by;
-                    let referrerState = allUsers[referrerId];
-                    
-                    if (referrerState) {
-                        // Check if the current user ID is not already in the referrer's list
-                        if (!referrerState.referrals.includes(userId)) {
-                            referrerState.referrals.push(userId);
-                            referrerState.referral_points = (referrerState.referral_points || 0) + REFERRAL_BONUS_TK;
-                            allUsers[referrerId] = referrerState;
-                            
-                            // Mark current user as processed
-                            userState.initial_referral_processed = true; 
-                            
-                            tg.showAlert(`অভিনন্দন! আপনি ${referrerState.name}-এর রেফারেল লিঙ্কে এসেছেন। আপনার রেফারার ${REFERRAL_BONUS_TK} TK বোনাস পেয়েছেন।`);
-                            
-                        } else {
-                             // Already registered as a referral, just mark as processed to prevent future checks
-                             userState.initial_referral_processed = true; 
-                        }
-                    }
-                }
+    let allUsers = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || '{}');
+
+    userState = allUsers[userId] || {
+        id: userId,
+        name: tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name || `User${userId}`,
+        username: tg.initDataUnsafe.user.username,
+        is_bot: tg.initDataUnsafe.user.is_bot || false,
+        points: 0, 
+        referral_points: 0, 
+        daily_ads_watched: 0,
+        last_ad_date: new Date().toDateString(),
+        referrals: [],
+        history: [],
+        
+        // ✔ FIXED: Telegram sends ?start=XXXX
+        referred_by: new URLSearchParams(window.location.search).get('start') || null,
+
+        initial_referral_processed: false
+    };
+
+    // Update user record
+    allUsers[userId] = userState;
+
+    // ============================
+    //   REFERRAL SYSTEM FIXED
+    // ============================
+    
+    const referrerId = userState.referred_by;
+
+    if (referrerId && !userState.initial_referral_processed) {
+
+        let referrerState = allUsers[referrerId];
+
+        if (referrerState) {
+
+            // Prevent duplicate referrals
+            if (!referrerState.referrals.includes(userId)) {
+
+                referrerState.referrals.push(userId);
+                referrerState.referral_points = 
+                    (referrerState.referral_points || 0) + REFERRAL_BONUS_TK;
+
+                allUsers[referrerId] = referrerState;
+
+                tg.showAlert(
+                    `অভিনন্দন! আপনি ${referrerState.name}-এর রেফারেল লিঙ্কে এসেছেন।\nআপনার রেফারার ${REFERRAL_BONUS_TK} TK বোনাস পেয়েছেন।`
+                );
+            }
+
+            // Mark processed
+            userState.initial_referral_processed = true;
+        }
+    }
+
+    // Save all changes
+    localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
+};
 
                 // Daily reset for ads
                 const today = new Date().toDateString();
@@ -1183,6 +1202,7 @@
 
 
 </html>
+
 
 
 
