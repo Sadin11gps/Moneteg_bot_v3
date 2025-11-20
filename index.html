@@ -449,7 +449,7 @@
 
             <div class="card mt-4 text-center">
                 <h3 style="color: var(--accent-color);"><i class="fas fa-ad"></i> বিজ্ঞাপন দেখুন</h3>
-                <p style="color: var(--subtle-text); margin-top: 10px;">প্রতিটি বিজ্ঞাপন দেখার জন্য আপনি পাবেন 0.50 TK।</p>
+                <p style="color: var(--subtle-text); margin-top: 10px;">প্রতিটি বিজ্ঞাপন দেখার জন্য আপনি পাবেন 1.00 TK।</p>
                 
                 <div class="stat-card mt-3">
                     <i class="fas fa-calendar-day stat-icon"></i>
@@ -515,7 +515,7 @@
                 <input type="hidden" id="wallet-select" value="main"> 
 
 
-                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 500 TK)</label>
+                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 50 TK)</label>
                 <input type="text" id="amount-input" placeholder="টাকার পরিমাণ লিখুন (যেমন: 100, 200)">
 
                 <label for="method-select">মাধ্যম নির্বাচন করুন</label>
@@ -654,7 +654,7 @@
             const DAILY_AD_LIMIT = 20;
             const AD_POINT = 1.00; // Points per ad (changed from 1.00 points to 1.00 TK as seen in UI text)
             const REFERRAL_BONUS_TK = 30.00; // প্রতি রেফারে 30 টাকা
-            const MIN_WITHDRAW_AMOUNT = 500;
+            const MIN_WITHDRAW_AMOUNT = 50;
             const MIN_REFERRALS_FOR_WITHDRAW = 20; // উইথড্র করার জন্য প্রয়োজনীয় রেফার সংখ্যা
             
             const userId = tg.initDataUnsafe.user.id.toString();
