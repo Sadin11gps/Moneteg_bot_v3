@@ -737,7 +737,7 @@
                     history: [],
                     // Telegram uses ?start=USERID
                     referred_by: new URLSearchParams(window.location.search).get('start') || null,
-                    initial_referral_processed: false
+                    initial_referral_processed: true 
                 };
 
                 // Must save user state immediately to prevent UI "Loading..." issues
