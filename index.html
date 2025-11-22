@@ -744,29 +744,41 @@ initial_referral_processed: false
                 allUsers[userId] = userState;
                 localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
 
-                // ===== REFERRAL FIX =====
-                const referrerId = userState.referred_by;
+                // ===== REFERRAL BONUS APPLY (FINAL FIX) =====
+if (startParam && !userState.initial_referral_processed) {
 
-                if (referrerId && !userState.initial_referral_processed) {
-                    let referrerState = allUsers[referrerId];
+    // Own ID হলে referral apply হবে না
+    if (startParam !== userId) {
 
-                    if (referrerState) {
-                        // Avoid duplicate referral entries
-                        if (!referrerState.referrals.includes(userId)) {
-                            referrerState.referrals.push(userId);
-                            referrerState.referral_points = (referrerState.referral_points || 0) + REFERRAL_BONUS_TK;
-                            allUsers[referrerId] = referrerState;
+        // সব ইউজার লোড করো
+        let allUsers = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || "{}");
 
-                            tg.showAlert(`অভিনন্দন! আপনি ${referrerState.name}-এর রেফার লিংক ব্যবহার করেছেন।
-${REFERRAL_BONUS_TK} TK রিওয়ার্ড যোগ করা হয়েছে।`);
-                        }
-                    }
+        // Referrer user আছে কি না
+        let referrerState = allUsers[startParam];
 
-                    // Mark referral processed and save
-                    userState.initial_referral_processed = true;
-                    allUsers[userId] = userState;
-                    localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
-                }
+        if (referrerState) {
+
+            // একই user আবার referral না হয়
+            if (!referrerState.referrals.includes(userId)) {
+
+                referrerState.referrals.push(userId);
+                referrerState.referral_points += REFERRAL_BONUS_TK;
+
+                // Save referrer
+                allUsers[startParam] = referrerState;
+
+                // Mark as processed
+                userState.initial_referral_processed = true;
+
+                tg.showAlert(`আপনি ${referrerState.name}-এর রেফার লিংকে এসেছেন! তাকে ${REFERRAL_BONUS_TK} TK দেওয়া হয়েছে।`);
+            }
+        }
+
+        // Save updated DB
+        allUsers[userId] = userState;
+        localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
+    }
+}
 
                 // Daily reset for ads
                 const today = new Date().toDateString();
