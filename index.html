@@ -515,7 +515,7 @@
                 <input type="hidden" id="wallet-select" value="main"> 
 
 
-                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 500 TK)</label>
+                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 50 TK)</label>
                 <input type="text" id="amount-input" placeholder="টাকার পরিমাণ লিখুন (যেমন: 100, 200)">
 
                 <label for="method-select">মাধ্যম নির্বাচন করুন</label>
@@ -651,11 +651,11 @@
             const ADMIN_CHAT_ID = "7702378694";
             const CHANNEL_LINK = "https://t.me/amrrdsteam";
             const GROUP_LINK = "https://t.me/smart_network81_group";
-            const DAILY_AD_LIMIT = 20;
-            const AD_POINT = 1.00; // Points per ad (changed from 1.00 points to 1.00 TK as seen in UI text)
+            const DAILY_AD_LIMIT = 10;
+            const AD_POINT = 50; // Points per ad (changed from 2 points to 0.50 TK as seen in UI text)
             const REFERRAL_BONUS_TK = 30.00; // প্রতি রেফারে 30 টাকা
-            const MIN_WITHDRAW_AMOUNT = 500;
-            const MIN_REFERRALS_FOR_WITHDRAW = 20; // উইথড্র করার জন্য প্রয়োজনীয় রেফার সংখ্যা
+            const MIN_WITHDRAW_AMOUNT = 50;
+            const MIN_REFERRALS_FOR_WITHDRAW = 00; // উইথড্র করার জন্য প্রয়োজনীয় রেফার সংখ্যা
             
             const userId = tg.initDataUnsafe.user.id.toString();
             let userState = {};
@@ -723,7 +723,6 @@
             
             const loadState = () => {
                 let allUsers = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || '{}');
-
                 userState = allUsers[userId] || {
                     id: userId,
                     name: tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name || `User${userId}`,
@@ -735,37 +734,31 @@
                     last_ad_date: new Date().toDateString(),
                     referrals: [], // Array of referred user IDs
                     history: [],
-                    // Telegram uses ?start=USERID
-                    referred_by: new URLSearchParams(window.location.search).get('start') || null,
-                    initial_referral_processed: true
+                    referred_by: new URLSearchParams(window.location.search).get('start_ref') || null
                 };
-
-                // Must save user state immediately to prevent UI "Loading..." issues
-                allUsers[userId] = userState;
-                localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
-
-                // ===== REFERRAL FIX =====
-                const referrerId = userState.referred_by;
-
-                if (referrerId && !userState.initial_referral_processed) {
+                
+                // CRITICAL FIX 3: Check and apply referral bonus on first load
+                if (userState.referred_by && !userState.initial_referral_processed) {
+                    const referrerId = userState.referred_by;
                     let referrerState = allUsers[referrerId];
-
+                    
                     if (referrerState) {
-                        // Avoid duplicate referral entries
+                        // Check if the current user ID is not already in the referrer's list
                         if (!referrerState.referrals.includes(userId)) {
                             referrerState.referrals.push(userId);
                             referrerState.referral_points = (referrerState.referral_points || 0) + REFERRAL_BONUS_TK;
                             allUsers[referrerId] = referrerState;
-
-                            tg.showAlert(`অভিনন্দন! আপনি ${referrerState.name}-এর রেফার লিংক ব্যবহার করেছেন।
-${REFERRAL_BONUS_TK} TK রিওয়ার্ড যোগ করা হয়েছে।`);
+                            
+                            // Mark current user as processed
+                            userState.initial_referral_processed = true; 
+                            
+                            tg.showAlert(`অভিনন্দন! আপনি ${referrerState.name}-এর রেফারেল লিঙ্কে এসেছেন। আপনার রেফারার ${REFERRAL_BONUS_TK} TK বোনাস পেয়েছেন।`);
+                            
+                        } else {
+                             // Already registered as a referral, just mark as processed to prevent future checks
+                             userState.initial_referral_processed = true; 
                         }
                     }
-
-                    // Mark referral processed and save
-                    userState.initial_referral_processed = true;
-                    allUsers[userId] = userState;
-                    localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
                 }
 
                 // Daily reset for ads
@@ -807,7 +800,7 @@ ${REFERRAL_BONUS_TK} TK রিওয়ার্ড যোগ করা হয়�
                 dailyAdsWatchedElem.textContent = userState.daily_ads_watched;
                 
                 // Referral Link (must be generated using the correct format)
-                const referralLink = `https://t.me/${BOT_USERNAME}?start=${userId}`;
+                const referralLink = `https://t.me/${BOT_USERNAME}?start=start_ref${userId}`;
                 referralLinkElem.value = referralLink;
                 
                 // Task Page
@@ -870,10 +863,10 @@ ${REFERRAL_BONUS_TK} TK রিওয়ার্ড যোগ করা হয়�
                 }
 
                 history.forEach(item => {
-                    const statusColor = item.status === 'success' ? 'var(--success-color)' : 
+                    const statusColor = item.status === 'Pending' ? 'var(--accent-color)' : 
                                         item.status === 'Approved' ? 'var(--success-color)' : 'var(--danger-color)';
                     
-                    const statusIcon = item.status === 'Pending' ? 'fa-check-circle' : 
+                    const statusIcon = item.status === 'Pending' ? 'fa-clock' : 
                                        item.status === 'Approved' ? 'fa-check-circle' : 'fa-times-circle';
                     
                     const listItem = document.createElement('div');
@@ -912,11 +905,11 @@ ${REFERRAL_BONUS_TK} TK রিওয়ার্ড যোগ করা হয়�
         return;
     }
 
-    // show loading UI and disable button
+    // 1️⃣ বিজ্ঞাপন লোড হচ্ছে popup দেখাই
     loadingModal.classList.remove('hidden');
     watchAdBtn.disabled = true;
 
-    // Try to call Monetag popup/show function if available
+    // 2️⃣ Monetag বিজ্ঞাপন চালু করাই
     try {
         if (window.show_10203066) {
             window.show_10203066();
@@ -925,7 +918,7 @@ ${REFERRAL_BONUS_TK} TK রিওয়ার্ড যোগ করা হয়�
         console.error("Ad Error:", error);
     }
 
-    // Wait 15 seconds to count as watched ad
+    // 3️⃣ 15 সেকেন্ড অপেক্ষা
     setTimeout(() => {
         loadingModal.classList.add('hidden');
 
@@ -935,14 +928,12 @@ ${REFERRAL_BONUS_TK} TK রিওয়ার্ড যোগ করা হয়�
         saveState();
         updateUI();
 
-        if (tg && tg.HapticFeedback && typeof tg.HapticFeedback.notificationOccurred === 'function') {
-            try { tg.HapticFeedback.notificationOccurred('success'); } catch(e){}
-        }
-
-        try { tg.showAlert(`বিজ্ঞাপন দেখা সম্পূর্ণ! আপনি ${AD_POINT.toFixed(2)} TK পেয়েছেন।`); } catch(e){}
+        tg.HapticFeedback.notificationOccurred('success');
+        tg.showAlert(`বিজ্ঞাপন দেখা সম্পূর্ণ! আপনি ${AD_POINT.toFixed(2)} TK পেয়েছেন।`);
 
         watchAdBtn.disabled = false;
-    }, 15000);
+
+    }, 15000);  // ⬅️ 15 Seconds
 };
             
             // CRITICAL FIX 4: Implemented Gemini API call for referral message generation
@@ -982,7 +973,7 @@ ${REFERRAL_BONUS_TK} TK রিওয়ার্ড যোগ করা হয়�
                     
                 } catch (error) {
                     console.error("Gemini API Error:", error);
-                    generatedMessageTextarea.value = "নেটওয়ার্ক সমস্যা বা সার্ভার ত্রুটির কারণে মেসেজ তৈরি করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।";
+                    generatedMessageTextarea.value = "নেটওয়ার্ক সমস্যা বা সার্ভার ত্রুটির কারণে মেসেজ তৈরি করা যায়নি। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।";
                 }
             };
             
