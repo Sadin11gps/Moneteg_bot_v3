@@ -864,10 +864,10 @@
 
                 history.forEach(item => {
                     const statusColor = item.status === 'Approved' ? 'var(--success-color)' : 
-                                        item.status === 'Rejected' ? 'var(--working-color)' : 'var(--danger-color)';
+                                        item.status === 'Success' ? 'var(--success-color)' : 'var(--success-color)';
                     
                     const statusIcon = item.status === 'Apptoved' ? 'fa-check-circle' : 
-                                       item.status === 'Rejected' ? 'fa-crose-circle' : 'fa-times-circle';
+                                       item.status === 'Success' ? 'fa-check-circle' : 'fa-check-circle';
                     
                     const listItem = document.createElement('div');
                     listItem.className = 'card';
@@ -1183,6 +1183,7 @@
 
 
 </html>
+
 
 
 
