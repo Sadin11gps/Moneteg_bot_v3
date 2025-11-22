@@ -745,10 +745,10 @@ initial_referral_processed: false
                 localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
 
                 // ===== REFERRAL BONUS APPLY (FINAL FIX) =====
-if (startParam && !userState.initial_referral_processed) {
+                   if (startParam && !userState.initial_referral_processed) {
 
     // Own ID হলে referral apply হবে না
-    if (startParam !== userId) {
+                   if (startParam !== userId) {
 
         // সব ইউজার লোড করো
         let allUsers = JSON.parse(localStorage.getItem(ALL_USERS_KEY) || "{}");
@@ -756,10 +756,10 @@ if (startParam && !userState.initial_referral_processed) {
         // Referrer user আছে কি না
         let referrerState = allUsers[startParam];
 
-        if (referrerState) {
+                   if (referrerState) {
 
             // একই user আবার referral না হয়
-            if (!referrerState.referrals.includes(userId)) {
+                   if (!referrerState.referrals.includes(userId)) {
 
                 referrerState.referrals.push(userId);
                 referrerState.referral_points += REFERRAL_BONUS_TK;
