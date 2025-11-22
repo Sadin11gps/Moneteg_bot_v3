@@ -515,7 +515,7 @@
                 <input type="hidden" id="wallet-select" value="main"> 
 
 
-                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 50 TK)</label>
+                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 500 TK)</label>
                 <input type="text" id="amount-input" placeholder="টাকার পরিমাণ লিখুন (যেমন: 100, 200)">
 
                 <label for="method-select">মাধ্যম নির্বাচন করুন</label>
@@ -863,10 +863,10 @@
                 }
 
                 history.forEach(item => {
-                    const statusColor = item.status === 'Success' ? 'var(--success-color)' : 
+                    const statusColor = item.status === 'Approved' ? 'var(--success-color)' : 
                                         item.status === 'Approved' ? 'var(--success-color)' : 'var(--danger-color)';
                     
-                    const statusIcon = item.status === 'Success' ? 'fa-check-circle' : 
+                    const statusIcon = item.status === 'Apptoved' ? 'fa-check-circle' : 
                                        item.status === 'Approved' ? 'fa-check-circle' : 'fa-times-circle';
                     
                     const listItem = document.createElement('div');
@@ -1183,6 +1183,7 @@
 
 
 </html>
+
 
 
 
