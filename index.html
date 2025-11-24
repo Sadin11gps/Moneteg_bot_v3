@@ -449,7 +449,7 @@
 
             <div class="card mt-4 text-center">
                 <h3 style="color: var(--accent-color);"><i class="fas fa-ad"></i> বিজ্ঞাপন দেখুন</h3>
-                <p style="color: var(--subtle-text); margin-top: 10px;">প্রতিটি বিজ্ঞাপন দেখার জন্য আপনি পাবেন 0.50 TK।</p>
+                <p style="color: var(--subtle-text); margin-top: 10px;">প্রতিটি বিজ্ঞাপনের জন্য আপনি পাবেন 5 TK।</p>
                 
                 <div class="stat-card mt-3">
                     <i class="fas fa-calendar-day stat-icon"></i>
@@ -515,7 +515,7 @@
                 <input type="hidden" id="wallet-select" value="main"> 
 
 
-                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 50 TK)</label>
+                <label for="amount-input">উত্তোলনের পরিমাণ (ন্যূনতম 500 TK)</label>
                 <input type="text" id="amount-input" placeholder="টাকার পরিমাণ লিখুন (যেমন: 100, 200)">
 
                 <label for="method-select">মাধ্যম নির্বাচন করুন</label>
@@ -651,11 +651,11 @@
             const ADMIN_CHAT_ID = "7702378694";
             const CHANNEL_LINK = "https://t.me/amrrdsteam";
             const GROUP_LINK = "https://t.me/smart_network81_group";
-            const DAILY_AD_LIMIT = 10;
-            const AD_POINT = 50; // Points per ad (changed from 2 points to 0.50 TK as seen in UI text)
+            const DAILY_AD_LIMIT = 20;
+            const AD_POINT = 5; // Points per ad (changed from 2 points to 0.50 TK as seen in UI text)
             const REFERRAL_BONUS_TK = 30.00; // প্রতি রেফারে 30 টাকা
-            const MIN_WITHDRAW_AMOUNT = 50;
-            const MIN_REFERRALS_FOR_WITHDRAW = 00; // উইথড্র করার জন্য প্রয়োজনীয় রেফার সংখ্যা
+            const MIN_WITHDRAW_AMOUNT = 500;
+            const MIN_REFERRALS_FOR_WITHDRAW = 20; // উইথড্র করার জন্য প্রয়োজনীয় রেফার সংখ্যা
             
             const userId = tg.initDataUnsafe.user.id.toString();
             let userState = {};
@@ -863,10 +863,10 @@
                 }
 
                 history.forEach(item => {
-                    const statusColor = item.status === 'Pending' ? 'var(--accent-color)' : 
-                                        item.status === 'Approved' ? 'var(--success-color)' : 'var(--danger-color)';
+                    const statusColor = item.status === 'Approved' ? 'var(--success-color)' : 
+                                        item.status === 'Approved' ? 'var(--success-color)' : 'var(--success-color)';
                     
-                    const statusIcon = item.status === 'Pending' ? 'fa-clock' : 
+                    const statusIcon = item.status === 'Approved' ? 'fa-check' : 
                                        item.status === 'Approved' ? 'fa-check-circle' : 'fa-times-circle';
                     
                     const listItem = document.createElement('div');
@@ -933,7 +933,7 @@
 
         watchAdBtn.disabled = false;
 
-    }, 15000);  // ⬅️ 15 Seconds
+    }, 30000);  // ⬅️ 15 Seconds
 };
             
             // CRITICAL FIX 4: Implemented Gemini API call for referral message generation
@@ -1183,6 +1183,7 @@
 
 
 </html>
+
 
 
 
